@@ -18,12 +18,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const firstname = nameParts[0];
     const lastname = nameParts.slice(1).join(" ") || "";
 
+    // Map campaign ID to a readable category name
+    const campaignMap: Record<string, string> = {
+      "recruitment": "x eXp Recruitment",
+      "lettings": "Lettings",
+      "block-management": "Block Management",
+      "auctions": "Auctions & Investments"
+    };
+
+    const campaignName = campaignMap[campaign] || campaign;
+
     const hubspotData = {
       properties: {
         email,
         firstname,
         lastname,
         phone,
+        // Store the campaign source in the 'jobtitle' field for immediate visibility
+        // and also try to set a custom 'campaign_category' property if it exists.
+        jobtitle: `Lead Source: ${campaignName}`,
+        campaign_category: campaignName
       }
     };
 

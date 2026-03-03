@@ -24,16 +24,26 @@ async function startServer() {
       const firstname = nameParts[0];
       const lastname = nameParts.slice(1).join(" ") || "";
 
+      // Map campaign ID to a readable category name
+      const campaignMap: Record<string, string> = {
+        "recruitment": "x eXp Recruitment",
+        "lettings": "Lettings",
+        "block-management": "Block Management",
+        "auctions": "Auctions & Investments"
+      };
+
+      const campaignName = campaignMap[campaign] || campaign;
+
       const hubspotData = {
         properties: {
           email,
           firstname,
           lastname,
           phone,
-          // We can add a custom property for campaign if it exists in HubSpot, 
-          // but to be safe we'll just stick to standard contact fields.
-          // If you have a 'campaign_source' property, uncomment the line below:
-          // campaign_source: campaign
+          // Store the campaign source in the 'jobtitle' field for immediate visibility
+          // and also try to set a custom 'campaign_category' property if it exists.
+          jobtitle: `Lead Source: ${campaignName}`,
+          campaign_category: campaignName
         }
       };
 
