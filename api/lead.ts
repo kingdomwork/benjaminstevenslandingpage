@@ -34,12 +34,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         firstname,
         lastname,
         phone,
-        // Store the campaign source in the 'jobtitle' field for immediate visibility
-        // and also try to set a custom 'campaign_category' property if it exists.
+        // We use 'jobtitle' to store the campaign source because it is a default HubSpot property.
+        // Custom properties like 'campaign_category' will cause a 400 error if they don't exist in your HubSpot account.
         jobtitle: `Lead Source: ${campaignName}`,
-        campaign_category: campaignName
       }
     };
+
+    console.log("Sending data to HubSpot:", JSON.stringify(hubspotData, null, 2));
 
     const response = await fetch("https://api.hubapi.com/crm/v3/objects/contacts", {
       method: "POST",
@@ -58,8 +59,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
          return res.json({ success: true, message: "Contact already exists" });
       }
 
-      console.error("HubSpot API Error:", errorData);
-      return res.status(response.status).json({ error: "Failed to submit to CRM", details: errorData });
+      console.error("HubSpot API Error:", JSON.stringify(errorData, null, 2));
+      // Return the actual error message to the client for debugging
+      return res.status(response.status).json({ 
+        error: "Failed to submit to CRM", 
+        details: errorData.message || errorData 
+      });
     }
 
     const data = await response.json();

@@ -40,10 +40,9 @@ async function startServer() {
           firstname,
           lastname,
           phone,
-          // Store the campaign source in the 'jobtitle' field for immediate visibility
-          // and also try to set a custom 'campaign_category' property if it exists.
+          // We use 'jobtitle' to store the campaign source because it is a default HubSpot property.
+          // Custom properties like 'campaign_category' will cause a 400 error if they don't exist in your HubSpot account.
           jobtitle: `Lead Source: ${campaignName}`,
-          campaign_category: campaignName
         }
       };
 
