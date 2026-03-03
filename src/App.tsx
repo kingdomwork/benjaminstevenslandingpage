@@ -4,6 +4,7 @@
  */
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Toaster } from "sonner";
 import Home from "@/pages/Home";
 import Recruitment from "@/pages/Recruitment";
 import Lettings from "@/pages/Lettings";
@@ -15,6 +16,7 @@ import NotFound from "@/pages/NotFound";
 export default function App() {
   return (
     <BrowserRouter>
+      <Toaster position="top-center" richColors />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/recruitment" element={<Recruitment />} />

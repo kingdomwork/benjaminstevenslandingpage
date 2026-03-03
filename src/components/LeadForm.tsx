@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { Button, Input } from "@/components/ui/form-elements";
 import { useState } from "react";
 import { motion } from "motion/react";
+import { toast } from "sonner";
 
 interface LeadFormProps {
   campaign: string;
@@ -30,11 +31,11 @@ export function LeadForm({ campaign, ctaText = "Submit" }: LeadFormProps) {
       setIsSubmitting(false);
       setIsSuccess(true);
       reset();
+      toast.success("Details submitted successfully!");
     } catch (error) {
       console.error("Submission error:", error);
       setIsSubmitting(false);
-      // Optionally handle error state here
-      alert("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
     }
   };
 
